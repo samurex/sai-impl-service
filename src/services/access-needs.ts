@@ -1,7 +1,7 @@
-import { AuthorizationAgent } from "@janeirodigital/interop-authorization-agent";
-import { getAllObjects, getAllSubjects, getOneObject, getOneSubject } from "../utils/rdf-parser";
-import { INTEROP, RDF } from "@janeirodigital/interop-namespaces";
-import { DatasetCore, Term } from "@rdfjs/types";
+import { AuthorizationAgent } from '@janeirodigital/interop-authorization-agent';
+import { getAllObjects, getAllSubjects, getOneObject, getOneSubject } from '../utils/rdf-parser';
+import { INTEROP, RDF } from '@janeirodigital/interop-namespaces';
+import { DatasetCore, Term } from '@rdfjs/types';
 
 export const getAccessNeeds = async (agent: AuthorizationAgent, applicationId: string) => {
   const needs = [];
@@ -28,9 +28,7 @@ export const getAccessNeeds = async (agent: AuthorizationAgent, applicationId: s
 
 const buildAccessNeed = (subject: Term, data: DatasetCore) => {
   const id = getOneSubject(data)?.value;
-  const optional = getOneObject(data.match(subject, INTEROP.accessNecessity))?.equals(
-    INTEROP.AccessOptional
-  );
+  const optional = getOneObject(data.match(subject, INTEROP.accessNecessity))?.equals(INTEROP.AccessOptional);
   const needs = getAllObjects(data.match(subject, INTEROP.accessMode)).map((q) => q.value);
 
   return { id, optional, type: INTEROP.AccessNeed.value, needs };
@@ -38,9 +36,7 @@ const buildAccessNeed = (subject: Term, data: DatasetCore) => {
 
 const buildAccessNeedGroup = (data: DatasetCore) => {
   const id = getOneSubject(data.match(null, RDF.type, INTEROP.AccessNeedGroup));
-  const optional = getOneObject(data.match(id, INTEROP.accessNecessity))?.equals(
-    INTEROP.AccessOptional
-  );
+  const optional = getOneObject(data.match(id, INTEROP.accessNecessity))?.equals(INTEROP.AccessOptional);
 
   return { id: id?.value, optional, type: INTEROP.AccessNeedGroup.value };
 };

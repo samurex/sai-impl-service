@@ -4,6 +4,6 @@ export const RedisStorage = {
   instance: {
     get: jest.fn(),
     set: jest.fn(),
-    delete:jest.fn()
+    delete: jest.fn()
   }
-}
+};

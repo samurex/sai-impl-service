@@ -1,9 +1,9 @@
-import { AuthorizationAgent } from "@janeirodigital/interop-authorization-agent";
-import { getOneObject } from "../utils/rdf-parser";
-import { INTEROP, buildNamespace } from "@janeirodigital/interop-namespaces";
+import { AuthorizationAgent } from '@janeirodigital/interop-authorization-agent';
+import { getOneObject } from '../utils/rdf-parser';
+import { INTEROP, buildNamespace } from '@janeirodigital/interop-namespaces';
 
 // TODO (elf-pavlik) add to interop-namespaces
-const SKOS = buildNamespace('http://www.w3.org/2004/02/skos/core#')
+const SKOS = buildNamespace('http://www.w3.org/2004/02/skos/core#');
 
 /**
  * Get the descriptions for the requested language. If the descriptions for the language are not found
@@ -14,15 +14,9 @@ const SKOS = buildNamespace('http://www.w3.org/2004/02/skos/core#')
  * @param applicationIri application's profile document IRI
  * @param targetLang XSD language requested, e.g.: "en", "es", "i-navajo".
  */
-export const getDescriptions = async (
-  agent: AuthorizationAgent,
-  applicationIri: string,
-  targetLang: string
-) => {
+export const getDescriptions = async (agent: AuthorizationAgent, applicationIri: string, targetLang: string) => {
   const document = await agent.fetch(applicationIri).then((r) => r.dataset());
-  const descriptionSetIri = getOneObject(
-    document.match(null, INTEROP.hasAccessDescriptionSet)
-  )?.value;
+  const descriptionSetIri = getOneObject(document.match(null, INTEROP.hasAccessDescriptionSet))?.value;
 
   if (!descriptionSetIri) return null;
 
@@ -30,9 +24,7 @@ export const getDescriptions = async (
   // TODO (angel) contemplate cases where the descriptions are spread across multiple locations
   //              on the web. e.g.: .../desc-en.ttl, .../desc-es.ttl, etc.
 
-  const langs = [...descriptionSet.match(null, INTEROP.usesLanguage)].map(
-    (quad) => quad.object.value
-  );
+  const langs = [...descriptionSet.match(null, INTEROP.usesLanguage)].map((quad) => quad.object.value);
 
   if (!langs.includes(targetLang)) return null;
 
@@ -47,8 +39,7 @@ export const getDescriptions = async (
     const label = getOneObject(descriptionTriples.match(null, SKOS.prefLabel))?.value;
     const description = getOneObject(descriptionTriples.match(null, SKOS.description))?.value;
     let needId = getOneObject(descriptionTriples.match(null, INTEROP.hasAccessNeedGroup))?.value;
-    if (!needId)
-      needId = getOneObject(descriptionTriples.match(null, INTEROP.hasAccessNeed))?.value;
+    if (!needId) needId = getOneObject(descriptionTriples.match(null, INTEROP.hasAccessNeed))?.value;
 
     descriptions.push({ id, label, description, needId });
   }

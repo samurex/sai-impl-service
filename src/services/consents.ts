@@ -1,6 +1,6 @@
-import { AuthorizationAgent } from "@janeirodigital/interop-authorization-agent";
-import { INTEROP } from "@janeirodigital/interop-namespaces";
-import { ReadableAccessConsent } from "@janeirodigital/interop-data-model";
+import { AuthorizationAgent } from '@janeirodigital/interop-authorization-agent';
+import { INTEROP } from '@janeirodigital/interop-namespaces';
+import { ReadableAccessConsent } from '@janeirodigital/interop-data-model';
 
 export const getAccessConsents = async (agent: AuthorizationAgent, applicationId: string) => {
   const consents = [];

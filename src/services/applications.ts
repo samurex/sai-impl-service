@@ -1,13 +1,10 @@
-import { CRUDApplicationRegistration } from "@janeirodigital/interop-data-model";
-import { getOneObject, getOneSubject } from "../utils/rdf-parser";
-import { AuthorizationAgent } from "@janeirodigital/interop-authorization-agent";
-import { DatasetCore } from "@rdfjs/types";
-import { INTEROP, RDF } from "@janeirodigital/interop-namespaces";
+import { CRUDApplicationRegistration } from '@janeirodigital/interop-data-model';
+import { getOneObject, getOneSubject } from '../utils/rdf-parser';
+import { AuthorizationAgent } from '@janeirodigital/interop-authorization-agent';
+import { DatasetCore } from '@rdfjs/types';
+import { INTEROP, RDF } from '@janeirodigital/interop-namespaces';
 
-const buildApplicationProfile = (
-  profile: DatasetCore,
-  registration: CRUDApplicationRegistration
-) => {
+const buildApplicationProfile = (profile: DatasetCore, registration: CRUDApplicationRegistration) => {
   // TODO (angel) get iris using something like Inrupt's prefix generator
   // TODO (angel) data validation and how to handle when the applications profile is missing some components?
   const id = getOneSubject(profile.match(null, RDF.type, INTEROP.Application))?.value;
@@ -27,7 +24,7 @@ const buildApplicationProfile = (
     thumbnail,
     registeredAt,
     updatedAt,
-    accessNeedGroup,
+    accessNeedGroup
   };
 };
 
@@ -39,9 +36,7 @@ export const getApplications = async (agent: AuthorizationAgent) => {
 
   const profiles = [];
   for (const registration of registrations) {
-    const profile = await agent
-      .fetch(registration.registeredAgent)
-      .then((response) => response.dataset());
+    const profile = await agent.fetch(registration.registeredAgent).then((response) => response.dataset());
 
     const applicationProfile = buildApplicationProfile(profile, registration);
     profiles.push(applicationProfile);
